@@ -1,0 +1,61 @@
+version: '3.10'
+
+
+services:
+  db_postgres:
+  image: postgres:16
+  container_name: db_postgres
+  volumes:
+    - ~/pg_data/educational_platform:/var/lib/postgres/data
+  env_file:
+    - .env
+ep_project:
+  # build:
+  #   dockerfile: dockerfile
+  #   context: .
+  image: ep_project:latest
+  container_name: ep_project
+  depends_on:
+    - db_postgres
+  volumes:
+    - static_volume:/educational_platform/static
+  env_file:
+    - .env
+  command: >
+    sh -c "python3 manage.py runserver 0.0.0.0:8000"
+
+
+nginx:
+  build:
+    dockerfile: dockerfile
+    context: .
+    container_name: ep_nginx
+    image: ep_nginx
+    volumes:
+      - static_volume:/educational_platform/static
+    depends_on:
+      - ep_project
+    ports:
+      -"8000"
+
+
+
+
+
+
+
+# services:
+#   platform-app:
+#     build: 
+#     context: .
+#   ports:
+#     -"8000"
+#   volumes:
+#     - ./educational_platform:/educational_platform
+#   env_file:
+#     - .env
+  
+#   command: >
+#     sh -c "python3 manage.py runserver 0.0.0.0:8000"
+
+
