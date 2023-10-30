@@ -4,15 +4,13 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 WORKDIR /educational_platform
-COPY pyproject.toml /temp/pyproject.toml
-COPY educational_platform /educational_platform
+COPY pyproject.toml poetry.lock /educational_platform/
+
+RUN pip install -U pip && \
+    pip install poetry && \
+    poetry config virtualenvs.create false && \
+    poetry install
+COPY . ./
+COPY ../.env ./.env
 EXPOSE 8000
-
-RUN mkdir /educational_platform/static && chown -R educational_platform:educational_platform /educational_platform && chmod 755 /educational_platform
-COPY --chown=educational_platform:educational_platform . .
-
-RUN pip install -r /temp/pyproject.toml
-
-RUN adduser --disabled-password platform-user
-
-USER platform-user
+ENTRYPOINT ["bash", "-c", "/educational_platform/entrypoint.sh"]
