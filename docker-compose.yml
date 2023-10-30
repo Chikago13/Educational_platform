@@ -25,18 +25,18 @@ ep_project:
     sh -c "python3 manage.py runserver 0.0.0.0:8000"
 
 
-nginx:
-  build:
-    dockerfile: dockerfile
-    context: .
-    container_name: ep_nginx
-    image: ep_nginx
-    volumes:
-      - static_volume:/educational_platform/static
-    depends_on:
-      - ep_project
-    ports:
-      -"8000"
+# nginx:
+#   build:
+#     dockerfile: dockerfile
+#     context: .
+#     container_name: ep_nginx
+#     image: ep_nginx
+#     volumes:
+#       - static_volume:/educational_platform/static
+#     depends_on:
+#       - ep_project
+#     ports:
+#       -"8000"
 
 
 
