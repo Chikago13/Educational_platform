@@ -6,8 +6,8 @@ ENV PYTHONUNBUFFERED 1
 WORKDIR /educational_platform
 COPY pyproject.toml poetry.lock /educational_platform/
 
-RUN pip install -U pip && \
-    pip install poetry && \
+RUN pip3 install -U pip && \
+    pip3 install poetry && \
     poetry config virtualenvs.create false && \
     poetry install
 COPY . ./
