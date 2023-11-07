@@ -1,7 +1,7 @@
 from django.db import models
 
 from user.models import User
-from study.models import Specialization
+from study.models import Course, Specialization
 
 
 class Teacher(models.Model):
@@ -11,10 +11,10 @@ class Teacher(models.Model):
 
 
     def __repr__(self):
-        return f'{self.user}, {self.specialization}'
+        return f'id-{self.id}, {self.user}, {self.specialization}'
 
     def __str__(self):
-        return f'{self.user} {self.specialization}'
+        return f'id-{self.id}, {self.user} {self.specialization}'
     
     class Meta:
         verbose_name = "Учитель"
@@ -28,14 +28,33 @@ class Student(models.Model):
     
 
     def __repr__(self):
-        return f'{self.user}'
+        return f'id-{self.id}, {self.user}'
 
     def __str__(self):
-        return f'{self.user}'
+        return f'id-{self.id}, {self.user}'
     
     class Meta:
         verbose_name = "Студент"
         verbose_name_plural = "Студенты"
         ordering = ["user"]
+
+
+class Group(models.Model):
+    name = models.CharField(max_length=100, verbose_name='Название')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    students = models.ManyToManyField(Student)
+    teacher = models.ManyToManyField(Teacher)
+
+
+    def __repr__(self):
+        return f'{self.name}'
+
+    def __str__(self):
+        return f'{self.name}'
+    
+    class Meta:
+        verbose_name = "Группа"
+        verbose_name_plural = "Группы"
+        ordering = ["name"]
 
 
