@@ -21,3 +21,21 @@ class Teacher(models.Model):
         verbose_name_plural = "Учителя"
         ordering = ["user", "specialization"]
 
+
+class Student(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    age = models.DateTimeField(verbose_name='Возраст')
+    
+
+    def __repr__(self):
+        return f'{self.user}'
+
+    def __str__(self):
+        return f'{self.user}'
+    
+    class Meta:
+        verbose_name = "Студент"
+        verbose_name_plural = "Студенты"
+        ordering = ["user"]
+
+
