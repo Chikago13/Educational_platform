@@ -5,7 +5,7 @@ services:
       image: postgres:latest
       container_name: db_postgres
       volumes:
-        - /educational_platform_db/postgres:/var/lib/postgres/data
+        - .educational_platform_db./postgres:/var/lib/postgres/data
       expose:
         - 5432
       ports:
