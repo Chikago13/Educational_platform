@@ -2,7 +2,7 @@ from django.db import models
 from datetime import date
 
 from user.models import User
-from study.models import Specialization
+from study.models import Course, Specialization
 
 
 class Teacher(models.Model):
@@ -44,4 +44,24 @@ class Student(models.Model):
         verbose_name = "Студент"
         verbose_name_plural = "Студенты"
         ordering = ["user"]
+
+
+class Group(models.Model):
+    name = models.CharField(max_length=100, verbose_name='Название')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    students = models.ManyToManyField(Student)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+
+
+    def __repr__(self):
+        return f'{self.name}'
+
+    def __str__(self):
+        return f'{self.name}'
+    
+    class Meta:
+        verbose_name = "Группа"
+        verbose_name_plural = "Группы"
+        ordering = ["name"]
+
 
