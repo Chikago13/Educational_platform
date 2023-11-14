@@ -1,17 +1,26 @@
-from rest_framework import viewsets
-from rest_framework.generics import ListAPIView
 from itertools import chain
 
-from .models import Teacher, Student, Group
-from .serializers import TeacherSerializer, StudentSerializer, GroupSerializer, TeacherStudentSerializer
+from rest_framework import viewsets
+from rest_framework.generics import ListAPIView
+
+from .models import Group, Student, Teacher
+from .serializers import (
+    GroupSerializer,
+    StudentSerializer,
+    TeacherSerializer,
+    TeacherStudentSerializer,
+)
+
 
 class TeacherViewSet(viewsets.ModelViewSet):
     queryset = Teacher.objects.all()
     serializer_class = TeacherSerializer
 
+
 class StudentViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+
 
 class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
@@ -19,7 +28,10 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 
 class StudentTeacherListAPIView(ListAPIView):
-    student = Student.objects.all()
-    teacher =Teacher.objects.all()
-    queryset = chain(student, teacher)
     serializer_class = TeacherStudentSerializer
+
+    def get_queryset(self):
+        students = Student.objects.all()
+        teachers = Teacher.objects.all()
+        queryset = list(chain(students, teachers))
+        return queryset
