@@ -1,14 +1,23 @@
 from rest_framework import viewsets
-from .models import Specialization, Course, Article, Topic
-from .serializers import SpecializationSerializer, CourseSerializer, ArticleSerializer, TopicSerializer
+
+from .models import Article, Course, Specialization, Topic
+from .serializers import (
+    ArticleSerializer,
+    CourseSerializer,
+    SpecializationSerializer,
+    TopicSerializer,
+)
+
 
 class SpecializationViewSet(viewsets.ModelViewSet):
     queryset = Specialization.objects.all()
     serializer_class = SpecializationSerializer
 
+
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
+
 
 class ArticleViewSet(viewsets.ModelViewSet):
     queryset = Article.objects.all()

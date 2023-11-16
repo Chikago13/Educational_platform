@@ -1,7 +1,7 @@
+from constant.mixin import DateTimeMixin
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 
-from constant.mixin import DateTimeMixin
 from .manager import UserManager
 
 
