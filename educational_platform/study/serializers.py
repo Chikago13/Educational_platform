@@ -25,3 +25,19 @@ class TopicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Topic
         fields = "__all__"
+
+
+class ArticleTopicSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Article
+            field = "__all__"
+
+        def to_representation(self, instance):
+            match instance:
+                case Article():
+                    serializer = ArticleSerializer(instance)
+                case Topic():
+                    serializer = TopicSerializer(instance)
+                case _:
+                    raise ValueError()
+            return serializer.data
