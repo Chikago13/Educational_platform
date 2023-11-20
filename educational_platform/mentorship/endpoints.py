@@ -41,8 +41,8 @@ class StudentGroupAPIView(ListAPIView):
     serializer_class = StudentSerializer
 
     def get_queryset(self):
-        group = self.kwargs['pk']
-        student = Student.objects.filter(group__in = group)
+        group = self.kwargs["pk"]
+        student = Student.objects.filter(group__in=group)
         return student
 
 
@@ -50,19 +50,16 @@ class TeacherSpecializationAPIView(ListAPIView):
     serializer_class = TeacherSerializer
 
     def get_queryset(self):
-        specialization = self.kwargs['pk']
-        teacher = Teacher.objects.filter(specialization_id = specialization)
+        specialization = self.kwargs["pk"]
+        teacher = Teacher.objects.filter(specialization_id=specialization)
         return teacher
 
 
 class StudensCourseAPIView(ListAPIView):
     serializer_class = StudentSerializer
 
-
     def get_queryset(self):
-        course = self.kwargs['pk']
-        group = Group.objects.filter(course_id = course)
-        student = Student.objects.filter(group__in = group)
+        course = self.kwargs["pk"]
+        group = Group.objects.filter(course_id=course)
+        student = Student.objects.filter(group__in=group)
         return student
-
-

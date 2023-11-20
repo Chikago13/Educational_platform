@@ -1,9 +1,9 @@
 from rest_framework import viewsets
 from rest_framework.generics import ListAPIView
+from study.models import Topic
 
 from .models import Answer, Question, Test
 from .serializers import AnswerSerializer, QuestionSerializer, TestSerializer
-from study.models import Topic
 
 
 class AnswerViewSet(viewsets.ModelViewSet):
@@ -21,32 +21,32 @@ class TestViewSet(viewsets.ModelViewSet):
     serializer_class = TestSerializer
 
 
-# получение тестов определенного курса 
+# получение тестов определенного курса
 class CourseTestListAPIView(ListAPIView):
-    serializer_class = TestSerializer 
+    serializer_class = TestSerializer
 
     def get_queryset(self):
-        course_id = self.kwargs['pk']
-        topic_id= Topic.objects.filter(course = course_id)
-        test = Test.objects.filter(topic__in = topic_id)
+        course_id = self.kwargs["pk"]
+        topic_id = Topic.objects.filter(course=course_id)
+        test = Test.objects.filter(topic__in=topic_id)
         return test
 
 
-# получение вопросов теста  
+# получение вопросов теста
 class TestQuestionListAPIView(ListAPIView):
     serializer_class = QuestionSerializer
 
     def get_queryset(self):
-        test = self.kwargs['pk'] 
+        test = self.kwargs["pk"]
         queryset = Question.objects.filter(test_id=test)
         return queryset
-    
+
 
 # получение ответов вопроса
 class QuestionAnswerListAPIView(ListAPIView):
     serializer_class = AnswerSerializer
 
     def get_queryset(self):
-        question = self.kwargs['pk']
+        question = self.kwargs["pk"]
         queryset = Answer.objects.filter(question_id=question)
         return queryset

@@ -1,16 +1,16 @@
-from rest_framework import viewsets
 from itertools import chain
 
-from mentorship.models import Student, Group
+from mentorship.models import Group, Student
+from rest_framework import viewsets
+from rest_framework.generics import ListAPIView
 
 from .models import Article, Course, Specialization, Topic
-from rest_framework.generics import ListAPIView
 from .serializers import (
     ArticleSerializer,
+    ArticleTopicSerializer,
     CourseSerializer,
     SpecializationSerializer,
     TopicSerializer,
-    ArticleTopicSerializer,
 )
 
 
@@ -38,24 +38,26 @@ class TopicViewSet(viewsets.ModelViewSet):
 class CourseArticlesTopicsAPIView(ListAPIView):
     serializer_class = ArticleTopicSerializer
 
-
     def get_queryset(self):
-        course = self.kwargs['pk']
+        course = self.kwargs["pk"]
         articles = Article.objects.filter(course_id=course)
         topics = Topic.objects.filter(course_id=course)
         queryset = chain(articles, topics)
         return queryset
-    
+
 
 # получение рекомендации курсов для определенного студента
 class StudentCourseRecommendationView(ListAPIView):
     serializer_class = CourseSerializer
 
     def get_queryset(self):
-        student_id = self.kwargs['pk']
-        group = Group.objects.filter(students__in = student_id)
-        student_courses = Course.objects.filter(id__in = group.values('course'))
-        course_specializations = Course.objects.filter(specialization__in =student_courses.values('specialization'))
-        recommended_courses = course_specializations.exclude(id__in=student_courses.values('id'))
+        student_id = self.kwargs["pk"]
+        group = Group.objects.filter(students__in=student_id)
+        student_courses = Course.objects.filter(id__in=group.values("course"))
+        course_specializations = Course.objects.filter(
+            specialization__in=student_courses.values("specialization")
+        )
+        recommended_courses = course_specializations.exclude(
+            id__in=student_courses.values("id")
+        )
         return recommended_courses
-    
