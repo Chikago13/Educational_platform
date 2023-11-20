@@ -83,6 +83,6 @@ class Topic(DateTimeMixin, models.Model):
         return f"id-{self.pk}, {self.name}, {self.content}"
 
     class Meta:
-        verbose_name = "Статья"
-        verbose_name_plural = "Статьи"
+        verbose_name = "Тема"
+        verbose_name_plural = "Темы"
         ordering = ["name", "content", "date_created"]
