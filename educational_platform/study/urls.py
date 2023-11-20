@@ -11,6 +11,6 @@ router.register(r'topic', TopicViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    re_path("articles/(?P<pk>[^/.]+)/topic", CourseArticlesTopicsAPIView.as_view(), name="articles_topic"),
+    re_path("course/(?P<pk>[^/.]+)/articles_topic", CourseArticlesTopicsAPIView.as_view(), name="articles_topic"),
     re_path("student/(?P<pk>[^/.]+)/course", StudentCourseRecommendationView.as_view(), name="student_course"),
 ]

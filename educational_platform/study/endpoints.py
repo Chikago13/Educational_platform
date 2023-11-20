@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from itertools import chain
 
-from mentorship.models import Student
+from mentorship.models import Student, Group
 
 from .models import Article, Course, Specialization, Topic
 from rest_framework.generics import ListAPIView
@@ -43,7 +43,7 @@ class CourseArticlesTopicsAPIView(ListAPIView):
         course = self.kwargs['pk']
         articles = Article.objects.filter(course_id=course)
         topics = Topic.objects.filter(course_id=course)
-        queryset = list(chain(articles, topics))
+        queryset = chain(articles, topics)
         return queryset
     
 
@@ -52,10 +52,10 @@ class StudentCourseRecommendationView(ListAPIView):
     serializer_class = CourseSerializer
 
     def get_queryset(self):
-        student_id = self.kwargs['pk'] 
-        student = Student.objects.get(id=student_id)
-        student_courses = Course.objects.all()
-        student_specializations = Specialization.objects.filter(course__in=student_courses)
-        recommended_courses = Course.objects.filter(specialization__in=student_specializations).exclude(id__in=student_courses)
+        student_id = self.kwargs['pk']
+        group = Group.objects.filter(students__in = student_id)
+        student_courses = Course.objects.filter(id__in = group.values('course'))
+        course_specializations = Course.objects.filter(specialization__in =student_courses.values('specialization'))
+        recommended_courses = course_specializations.exclude(id__in=student_courses.values('id'))
         return recommended_courses
     
