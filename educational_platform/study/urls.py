@@ -8,6 +8,8 @@ from .endpoints import (
     SpecializationViewSet,
     StudentCourseRecommendationView,
     TopicViewSet,
+    CourseStudentView,
+    StudentCourseGroupmatesRecommendationView
 )
 
 router = DefaultRouter()
@@ -27,5 +29,15 @@ urlpatterns = [
         "student/(?P<pk>[^/.]+)/course",
         StudentCourseRecommendationView.as_view(),
         name="student_course",
+    ),
+    re_path(
+        "course/(?P<pk>[^/.]+)/student",
+        CourseStudentView.as_view(),
+        name="course_student",
+    ),
+    re_path(
+        "student/(?P<pk>[^/.]+)/course/group",
+        StudentCourseGroupmatesRecommendationView.as_view(),
+        name="student_course_recom",
     ),
 ]

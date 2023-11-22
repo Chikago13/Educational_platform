@@ -61,3 +61,27 @@ class StudentCourseRecommendationView(ListAPIView):
             id__in=student_courses.values("id")
         )
         return recommended_courses
+
+
+# получения всех курсов для определенного студента
+class CourseStudentView(ListAPIView):
+    serializer_class = CourseSerializer 
+
+    def get_queryset(self):
+        students = self.kwargs['pk']  
+        group = Group.objects.filter(students__id=students)
+        course = Course.objects.filter(group__in=group)
+        return course
+    
+
+# рекомендации курсов студенту на основании курсов, которые посещают его одногруппники
+class StudentCourseGroupmatesRecommendationView(ListAPIView):
+    serializer_class = CourseSerializer
+
+
+    def get_queryset(self):
+        student_id = self.kwargs["pk"]
+        student_group = Student.objects.get(id=student_id).group   #Получение группы студента
+        group_students = Student.objects.filter(group=student_group).exclude(id=student_id) # Получение всех студентов из той же группы, исключая текущего студента
+        recommended_courses = Course.objects.filter(students__in=group_students) #Исключаем курсы, которые уже посещает сам студент
+        return recommended_courses
