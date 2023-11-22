@@ -4,12 +4,12 @@ from rest_framework.routers import DefaultRouter
 from .endpoints import (
     ArticleViewSet,
     CourseArticlesTopicsAPIView,
+    CourseStudentView,
     CourseViewSet,
     SpecializationViewSet,
+    StudentCourseGroupmatesRecommendationView,
     StudentCourseRecommendationView,
     TopicViewSet,
-    CourseStudentView,
-    StudentCourseGroupmatesRecommendationView
 )
 
 router = DefaultRouter()
