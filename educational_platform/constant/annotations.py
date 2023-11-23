@@ -3,6 +3,7 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True, slots=True)
 class UserAnnotation:
+    id: int
     email: str
     first_name: str
     last_name: str
@@ -11,12 +12,13 @@ class UserAnnotation:
 
 @dataclass(frozen=True, slots=True)
 class SpecializationAnnotation:
+    id: int
     name: str
 
 
 @dataclass(frozen=True, slots=True)
 class TeacherAnnotation:
-    user: UserAnnotation
-    specialization: SpecializationAnnotation
+    user: UserAnnotation.id
+    specialization: SpecializationAnnotation.id
 
 

@@ -1,7 +1,7 @@
 from user.models import User
 from mentorship.models import Teacher
 from study.models import Specialization
-from annotations import UserAnnotation, SpecializationAnnotation, TeacherAnnotation
+from .annotations import UserAnnotation, SpecializationAnnotation, TeacherAnnotation
 
 
 USER_DATA: dict = {'email': 'user@email.com',
@@ -9,10 +9,6 @@ USER_DATA: dict = {'email': 'user@email.com',
              'last_name': 'user_last',
              'password': '123QWERt'
              }
-
-TEACHER_DATA: dict = {'user': USER_DATA,
-                'specialization': 'JS'
-                }
 
 
 def create_user()-> UserAnnotation:
