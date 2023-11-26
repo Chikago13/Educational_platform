@@ -79,10 +79,18 @@ class CourseStudentView(ListAPIView):
 class StudentCourseGroupmatesRecommendationView(ListAPIView):
     serializer_class = CourseSerializer
 
-    def get_queryset(self):
-        student_id = self.kwargs["pk"]       
-        student_groups = Group.objects.filter(id = student_id) #  Получаем все группы , где содержится студент
-        group_students = Student.objects.filter(group__in = student_groups).exclude(id = student_id) # Получаем все одногрупников нашего студента
-        recommended_courses = Course.objects.filter(students__in=group_students)  # Фильтруем курсы, которые посещают одногруппники данного студента
-        return recommended_courses
+    # def get_queryset(self):
+    #     student_id = self.kwargs["pk"]       
+    #     student_groups = Group.objects.filter(id = student_id) #  Получаем все группы , где содержится студент
+    #     group_students = Student.objects.filter(group__in = student_groups).exclude(id = student_id) # Получаем все одногрупников нашего студента
+    #     recommended_courses = Course.objects.filter(students__in=group_students)  # Фильтруем курсы, которые посещают одногруппники данного студента
+    #     return recommended_courses
         
+
+    def get_queryset(self):
+        student_id = self.kwargs["pk"]
+        groups = Group.objects.filter(students__id=student_id) #We find all the groups in which this student studies
+        student_courses = Course.objects.filter(group__in=groups) # We find courses related to these groups
+        recommended_courses = Course.objects.exclude(group__students=student_id) # We find recommended courses, excluding courses related to the student
+        return recommended_courses
+
