@@ -36,8 +36,8 @@ urlpatterns = [
         name="course_student",
     ),
     re_path(
-        "student/(?P<pk>[^/.]+)/course/group",
+        "student/(?P<pk>[^/.]+)/recom",
         StudentCourseGroupmatesRecommendationView.as_view(),
-        name="student_course_recom",
+        name="student_recom",
     ),
 ]

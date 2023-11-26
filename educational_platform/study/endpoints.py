@@ -12,6 +12,7 @@ from .serializers import (
     SpecializationSerializer,
     TopicSerializer,
 )
+from mentorship.serializers import StudentSerializer, GroupSerializer
 
 
 class SpecializationViewSet(viewsets.ModelViewSet):
@@ -79,14 +80,9 @@ class StudentCourseGroupmatesRecommendationView(ListAPIView):
     serializer_class = CourseSerializer
 
     def get_queryset(self):
-        student_id = self.kwargs["pk"]
-        student_group = Student.objects.get(
-            id=student_id
-        ).group  # Получение группы студента
-        group_students = Student.objects.filter(group=student_group).exclude(
-            id=student_id
-        )  # Получение всех студентов из той же группы, исключая текущего студента
-        recommended_courses = Course.objects.filter(
-            students__in=group_students
-        )  # Исключаем курсы, которые уже посещает сам студент
+        student_id = self.kwargs["pk"]       
+        student_groups = Group.objects.filter(id = student_id) #  Получаем все группы , где содержится студент
+        group_students = Student.objects.filter(group__in = student_groups).exclude(id = student_id) # Получаем все одногрупников нашего студента
+        recommended_courses = Course.objects.filter(students__in=group_students)  # Фильтруем курсы, которые посещают одногруппники данного студента
         return recommended_courses
+        
