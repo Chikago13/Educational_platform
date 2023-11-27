@@ -20,30 +20,31 @@ def create_specialization() -> SpecializationAnnotation:
     specialization = Specialization.objects.create(name="Mathematics")
     return specialization
 
-def create_teacher() -> TeacherAnnotation:
-    user = create_user()
+def create_teacher(user_id) -> TeacherAnnotation:
+    # user = create_user()
     specialization = create_specialization()
-    teacher = Teacher.objects.create(user=user, specialization=specialization)
+    teacher = Teacher.objects.create(user=user_id, specialization=specialization)
     return teacher
 
-def create_course() -> CourseAnnotation:
-    teacher = create_teacher()
+def create_course(user) -> CourseAnnotation:
+    teacher = create_teacher(user)
     specialization = create_specialization()
     course = Course.objects.create(name = 'Course_1', description = 'IT', teacher = teacher)
-    course.specialization.set([specialization])
+    course.specialization.add(specialization.id)
     return course
 
 
-def create_student()-> StudentAnnotation:
-    user = create_user()
-    students = Student.objects.create(user = user, rating = 6.0, birth_year = '2000-11-13')
+def create_student(user_id)-> StudentAnnotation:
+    # user = create_user()
+    students = Student.objects.create(user = user_id, rating = 6.0, birth_year = '2000-11-13')
     return students
 
 
 def create_group() -> GroupAnnotation:
-    course = create_course()
-    students = create_student()
-    teacher = create_teacher()
-    group = Group.objects.create(name = 'Group_1', course = course, teacher = teacher, students = students)
-    # group.students.set([students])
+    user = create_user()
+    course = create_course(user)
+    students = create_student(user)
+    teacher = create_teacher(user)
+    group = Group.objects.create(name = 'Group_1', course = course, teacher = teacher)
+    group.students.add(students.id)
     return group

@@ -30,7 +30,8 @@ class CreateTeacherTest(APITestCase):
 class ReadTeacherTest(APITestCase):
 
     def setUp(self):
-        self.teacher = create_teacher()
+        user = create_user()
+        self.teacher = create_teacher(user)
 
 
     def test_read_teacher_list(self):
@@ -47,7 +48,8 @@ class ReadTeacherTest(APITestCase):
 class UpdateTeacherTest(APITestCase):
 
     def setUp(self):
-        self.teacher = create_teacher()
+        user = create_user()
+        self.teacher = create_teacher(user)
         self.data = TeacherSerializer(self.teacher).data
         self.data.update({'specialization': create_specialization().id})
 
@@ -62,7 +64,8 @@ class UpdateTeacherTest(APITestCase):
 class DeleteTeacherTest(APITestCase):
 
     def setUp(self):
-        self.teacher = create_teacher()
+        user = create_user()
+        self.teacher = create_teacher(user)
 
     
     def test_delete_teacher(self):
@@ -75,13 +78,14 @@ class DeleteTeacherTest(APITestCase):
 class CreateGroupTest(APITestCase):
 
     def setUp(self):
-        self.course = create_course()
-        self.student = create_student()
-        self.teacher = create_teacher()
+        user = create_user()
+        self.course = create_course(user)
+        self.student = create_student(user)
+        self.teacher = create_teacher(user)
         self.group_data = {
             'name': 'Test Group',
             'course': self.course.id,
-            'students': self.student.id,
+            'students': [self.student.id],
             'teacher': self.teacher.id,
         }
 
@@ -103,7 +107,7 @@ class ReadGroupTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_read_group_detail(self):
-        url = reverse('group-detail', args=[self.group_id])
+        url = reverse('group-detail', args=[self.group_id.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
       
@@ -113,18 +117,15 @@ class UpdateGroupTest(APITestCase):
     def setUp(self):
         self.group = create_group()
         self.data = GroupSerializer(self.group).data
-        self.data.update({'course': create_course().id})
+        self.data.update({'name': 'Group'})
 
     
     def test_update_group(self):
-        url = reverse('group-detail', args=[self.group])
+        url = reverse('group-detail', args=[self.group.id])
         response = self.client.put(url, data=self.data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        # self.assertGreater(Group.objects.get(id=self.group.id).date_updated, self.group.date_updated)
+        self.assertGreater(Group.objects.get(id=self.group.id).date_updated, self.group.date_updated)
         
-        updated_group = Group.objects.get(id=self.group.id)
-        time_difference = timezone.now() - updated_group.date_updated
-        self.assertLess(time_difference, timedelta(seconds=1))
 
 class DeleteGroupTest(APITestCase):
 
@@ -132,6 +133,6 @@ class DeleteGroupTest(APITestCase):
         self.group_id = create_group()
 
     def test_delete_group(self):
-        url = reverse('group-detail', args=[self.group_id])
+        url = reverse('group-detail', args=[self.group_id.id])
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
