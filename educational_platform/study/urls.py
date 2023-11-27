@@ -4,8 +4,10 @@ from rest_framework.routers import DefaultRouter
 from .endpoints import (
     ArticleViewSet,
     CourseArticlesTopicsAPIView,
+    CourseStudentView,
     CourseViewSet,
     SpecializationViewSet,
+    StudentCourseGroupmatesRecommendationView,
     StudentCourseRecommendationView,
     TopicViewSet,
     # CourseStudentView,
@@ -29,9 +31,15 @@ urlpatterns = [
         StudentCourseRecommendationView.as_view(),
         name="student_course",
     ),
-    #     re_path(
-    #     "course/(?P<pk>[^/.]+)/student",
-    #     CourseStudentView.as_view(),
-    #     name="course_student",
-    # ),
+
+    re_path(
+        "course/(?P<pk>[^/.]+)/student",
+        CourseStudentView.as_view(),
+        name="course_student",
+    ),
+    re_path(
+        "student/(?P<pk>[^/.]+)/recom",
+        StudentCourseGroupmatesRecommendationView.as_view(),
+        name="student_recom",
+    ),
 ]
