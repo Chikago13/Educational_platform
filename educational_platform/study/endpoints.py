@@ -61,3 +61,5 @@ class StudentCourseRecommendationView(ListAPIView):
             id__in=student_courses.values("id")
         )
         return recommended_courses
+
+
