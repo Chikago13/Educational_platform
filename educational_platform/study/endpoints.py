@@ -64,7 +64,6 @@ class StudentCourseRecommendationView(ListAPIView):
         return recommended_courses
 
 
-
 # получения всех курсов для определенного студента
 class CourseStudentView(ListAPIView):
     serializer_class = CourseSerializer

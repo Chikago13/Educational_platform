@@ -1,7 +1,7 @@
 from django.urls import include, path, re_path
 from rest_framework.routers import DefaultRouter
 
-from .endpoints import (
+from .endpoints import (  # CourseStudentView,
     ArticleViewSet,
     CourseArticlesTopicsAPIView,
     CourseStudentView,
@@ -10,7 +10,6 @@ from .endpoints import (
     StudentCourseGroupmatesRecommendationView,
     StudentCourseRecommendationView,
     TopicViewSet,
-    # CourseStudentView,
 )
 
 router = DefaultRouter()
@@ -31,7 +30,6 @@ urlpatterns = [
         StudentCourseRecommendationView.as_view(),
         name="student_course",
     ),
-
     re_path(
         "course/(?P<pk>[^/.]+)/student",
         CourseStudentView.as_view(),
