@@ -23,6 +23,7 @@ class User(DateTimeMixin, AbstractBaseUser, PermissionsMixin):
     def generate_jwt(self):
         payload = {
             'user_id': self.pk,
+            'email': self.email,
             'exp': datetime.utcnow() + timedelta(days=1),
             'iat': datetime.utcnow()
         }
@@ -30,7 +31,7 @@ class User(DateTimeMixin, AbstractBaseUser, PermissionsMixin):
 
     
     @staticmethod
-    def decode(token):
+    def decode_jwt(token):
         try:
             payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
             return payload["user_id"]
